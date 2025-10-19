@@ -3,9 +3,9 @@ These scripts are designed to upgrade system packages, update Ollama, and config
 
 ***They are tested and used for Fedora Linux - please adjust for other distributions***
 
-### What Each Script Accomplishes
+## What Each Script Accomplishes
 
-#### `update.sh`
+### `update.sh`
 
 #### Description
 When the ollama update is run, all set environment variables are deleted.
@@ -31,7 +31,7 @@ This script first runs a full system update and ensures everything is up an runn
 4. **Model Updates**:
    - Updates all installed Ollama models to their latest versions
 
-#### `change_gtt_size_for_amd_igpu.sh`
+### `change_gtt_size_for_amd_igpu.sh`
 
 #### Description
 This script changes the size of the GTT memory assigned to the AMD iGPU, but limits the size to half of the available system memory.
@@ -81,16 +81,17 @@ May or may not work - use at your own risk.
    - Uses the modified modelfile to create a new model with the `num_gpu` restriction.
    - This allows better GPU memory management for models when running locally.
 
-#### Important Notes
+## Important Notes
 - These scripts were generated with the help of local AI (Qwen3-Coder 30b)
 - These scripts were tested and will work on Fedora 42
 - Usage at your own risk
 - Requires root privileges to execute properly
 
-### Usage
+## Usage
 Run all scripts with appropriate permissions, e.g.:
 ```bash
-chmod +x update.sh change_gtt_size_for_amd_igpu.sh
+chmod +x update.sh change_gtt_size_for_amd_igpu.sh overwrite_gpu_restriction_to_modelfiles.sh
 ./update.sh
 ./change_gtt_size_for_amd_igpu.sh
+./overwrite_gpu_restriction_to_modelfiles.sh
 ```
