@@ -1,4 +1,3 @@
-Run
 #!/bin/bash
 
 # Enter the desired size of your graphics transfer table in gb

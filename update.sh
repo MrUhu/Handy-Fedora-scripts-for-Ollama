@@ -1,4 +1,6 @@
 #!/bin/bash
+HSA_OVERRIDE_GFX_VERSION="11.0.2"
+
 echo "Upgrade the packages"
 sudo dnf upgrade -y
 
@@ -41,15 +43,16 @@ else
     
     if [ "$clean_latest" = "$updated_version" ]; then
         # Add Environment variable to ollama service
-        if grep -q 'Environment="HSA_OVERRIDE_GFX_VERSION=11.0.2"' /etc/systemd/system/ollama.service; then
+        if grep -q 'Environment="HSA_OVERRIDE_GFX_VERSION='"$HSA_OVERRIDE_GFX_VERSION"'"' /etc/systemd/system/ollama.service; then
             echo "Environment variable already exists"
         else
             # Add the environment variable line after [Service] section
             if [ -f /etc/systemd/system/ollama.service ]; then
-                sudo sed -i '/\[Service\]/a Environment="HSA_OVERRIDE_GFX_VERSION=11.0.2"' /etc/systemd/system/ollama.service
+                sudo sed -i '/\[Service\]/a Environment="HSA_OVERRIDE_GFX_VERSION='"$HSA_OVERRIDE_GFX_VERSION"'"' /etc/systemd/system/ollama.service
                 sudo sed -i '/\[Service\]/a Environment="OLLAMA_KV_CACHE_TYPE=q4_0"' /etc/systemd/system/ollama.service
                 sudo sed -i '/\[Service\]/a Environment="OLLAMA_NUM_PARALLEL=3"' /etc/systemd/system/ollama.service
                 sudo sed -i '/\[Service\]/a Environment="OLLAMA_MAX_LOADED_MODELS=3"' /etc/systemd/system/ollama.service
+                sudo sed -i '/\[Service\]/a Environment="GGML_CUDA_ENABLE_UNIFIED_MEMORY=ON"' /etc/systemd/system/ollama.service
                 echo "Environment variable added"
 
                 # Restart Ollama with GPU enabled
@@ -57,8 +60,8 @@ else
                 sudo systemctl daemon-reload
                 sudo systemctl restart ollama.service
 
-                echo "Waiting 3 seconds for Ollama to restart"
-                sleep 3
+                echo "Waiting 10 seconds for Ollama to restart"
+                sleep 10
             else
                 echo "Ollama service file not found"
             fi
@@ -70,15 +73,16 @@ fi
 
 # After updating check for Ollama Environment Variable and restart
 # Add Environment variable to ollama service
-if grep -q 'Environment="HSA_OVERRIDE_GFX_VERSION=11.0.2"' /etc/systemd/system/ollama.service; then
+if grep -q 'Environment="HSA_OVERRIDE_GFX_VERSION='"$HSA_OVERRIDE_GFX_VERSION"'"' /etc/systemd/system/ollama.service; then
     echo "Post-Update Environment Variable Check successful..."
 else
     # Add the environment variable line after [Service] section
     if [ -f /etc/systemd/system/ollama.service ]; then
-        sudo sed -i '/\[Service\]/a Environment="HSA_OVERRIDE_GFX_VERSION=11.0.2"' /etc/systemd/system/ollama.service
+        sudo sed -i '/\[Service\]/a Environment="HSA_OVERRIDE_GFX_VERSION='"$HSA_OVERRIDE_GFX_VERSION"'"' /etc/systemd/system/ollama.service
         sudo sed -i '/\[Service\]/a Environment="OLLAMA_KV_CACHE_TYPE=q4_0"' /etc/systemd/system/ollama.service
         sudo sed -i '/\[Service\]/a Environment="OLLAMA_NUM_PARALLEL=3"' /etc/systemd/system/ollama.service
         sudo sed -i '/\[Service\]/a Environment="OLLAMA_MAX_LOADED_MODELS=3"' /etc/systemd/system/ollama.service
+        sudo sed -i '/\[Service\]/a Environment="GGML_CUDA_ENABLE_UNIFIED_MEMORY=ON"' /etc/systemd/system/ollama.service
         echo "Environment variable added"
 
         # Restart Ollama with GPU enabled
