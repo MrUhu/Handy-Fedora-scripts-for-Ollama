@@ -53,7 +53,7 @@ else
                 sudo sed -i '/\[Service\]/a Environment="OLLAMA_KV_CACHE_TYPE=q4_0"' /etc/systemd/system/ollama.service
                 sudo sed -i '/\[Service\]/a Environment="OLLAMA_NUM_PARALLEL=3"' /etc/systemd/system/ollama.service
                 sudo sed -i '/\[Service\]/a Environment="OLLAMA_MAX_LOADED_MODELS=3"' /etc/systemd/system/ollama.service
-                sudo sed -i '/\[Service\]/a Environment="GGML_CUDA_ENABLE_UNIFIED_MEMORY=ON"' /etc/systemd/system/ollama.service
+                #sudo sed -i '/\[Service\]/a Environment="GGML_CUDA_ENABLE_UNIFIED_MEMORY=ON"' /etc/systemd/system/ollama.service
                 echo "Environment variable added"
 
                 # Restart Ollama with GPU enabled
@@ -84,7 +84,7 @@ else
         sudo sed -i '/\[Service\]/a Environment="OLLAMA_KV_CACHE_TYPE=q4_0"' /etc/systemd/system/ollama.service
         sudo sed -i '/\[Service\]/a Environment="OLLAMA_NUM_PARALLEL=3"' /etc/systemd/system/ollama.service
         sudo sed -i '/\[Service\]/a Environment="OLLAMA_MAX_LOADED_MODELS=3"' /etc/systemd/system/ollama.service
-        sudo sed -i '/\[Service\]/a Environment="GGML_CUDA_ENABLE_UNIFIED_MEMORY=ON"' /etc/systemd/system/ollama.service
+        #sudo sed -i '/\[Service\]/a Environment="GGML_CUDA_ENABLE_UNIFIED_MEMORY=ON"' /etc/systemd/system/ollama.service
         echo "Environment variable added"
 
         # Restart Ollama with GPU enabled
