@@ -36,9 +36,9 @@ This script first runs a full system update and ensures everything is up an runn
 ### `change_gtt_size_for_amd_igpu.sh`
 
 #### Description
-This script changes the size of the GTT memory assigned to the AMD iGPU, but limits the size to half of the available system memory.
+This script changes the size of the GTT memory assigned to the AMD iGPU, but limits the size to half of the available system memory - this can be overwritten to 90% of system memory.
 If Ollama or AMD ROCm introduce no bugs that impacts memory handling - the available LLM memory will be vRAM+GTT.
-Works with Ollama 0.12.6.
+Works with Ollama 0.12.11.
 
 1. **GTT Memory Configuration**:
    - Calculates required GTT (Graphics Transfer Table) memory size based on user input
@@ -90,10 +90,10 @@ May or may not work - use at your own risk.
 - Requires root privileges to execute properly
 
 ## Usage
-Run all scripts with appropriate permissions, e.g.:
+To apply all changes, run scripts with appropriate permissions, e.g.:
 ```bash
 chmod +x update.sh change_gtt_size_for_amd_igpu.sh overwrite_gpu_restriction_to_modelfiles.sh
 ./update.sh
-./change_gtt_size_for_amd_igpu.sh
 ./overwrite_gpu_restriction_to_modelfiles.sh
+./change_gtt_size_for_amd_igpu.sh
 ```

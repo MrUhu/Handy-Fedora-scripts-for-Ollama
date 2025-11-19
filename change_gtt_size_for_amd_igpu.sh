@@ -10,15 +10,28 @@ if ! [[ "$number" =~ ^[0-9]+$ ]]; then
     exit 1
 fi
 
-# Get available system memory in GB
 available_memory=$(free -g | awk '/^Mem:/{print $2}')
 
-# Check if the entered number is smaller or equal to 50% of available system memory
-max_size=$((available_memory / 2))
+# Calculate 50% and 90% of available system memory for limits
+max_size_50_percent=$((available_memory / 2))
+max_size_90_percent=$((available_memory * 9 / 10)) # 90% of available memory
 
-if [ "$number" -gt "$max_size" ]; then
-    echo "Error: The requested GTT size ($number GB) exceeds 50% of available system memory ($max_size GB)."
-    exit 1
+if [ "$number" -gt "$max_size_50_percent" ]; then
+    echo "Warning: The requested GTT size ($number GB) exceeds 50% of available system memory ($available_memory GB)."
+    if [ "$number" -le "$max_size_90_percent" ]; then
+        read -p "Do you want to overwrite the 50% limit and set GTT size up to 90% of available memory? (y/N): " response
+        if [[ "$response" =~ ^[yY]$ ]]; then
+            echo "Proceeding with GTT size $number GB, using up to 90% of system memory."
+            # The script will continue as the number is within the 90% limit.
+        else
+            echo "Error: GTT size request rejected by user."
+            exit 1
+        fi
+    else
+        echo "Error: The requested GTT size ($number GB) exceeds 90% of available system memory ($max_size_90_percent GB)."
+        echo "A minimum of 10% of system memory ($((available_memory - max_size_90_percent)) GB) should be spared."
+        exit 1
+    fi
 fi
 
 # Perform the calculation: (number * 1024 * 1024 * 1024)/4096
@@ -56,7 +69,6 @@ echo "-------------------------------"
 if [ "$gtt_page_value" -ne "$result" ]; then
     echo "Values don't match, applying kernel parameter changes..."
     # Apply the changes
-    #sudo grubby --update-kernel=ALL --args="ttm.pages_limit=$result ttm.page_pool_size=$result no_system_mem_limit=Y"
     sudo grubby --update-kernel=ALL --args="ttm.pages_limit=$result ttm.page_pool_size=$result"
     echo "Kernel parameters updated successfully"
     
