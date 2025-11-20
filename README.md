@@ -23,11 +23,9 @@ This script first runs a full system update and ensures everything is up an runn
 
 3. **GPU Configuration**:
    - Sets environment variable `HSA_OVERRIDE_GFX_VERSION=11.0.2` for Ollama service
-   - Sets `OLLAMA_VULKAN=1` to increase compatibility for unsupported iGPUs (effective with Ollama 0.12.11)
    - Sets `OLLAMA_KV_CACHE_TYPE=q4_0` to optimize cache usage
    - Sets `OLLAMA_NUM_PARALLEL=3` to control parallelism if coding, embedding and autocompletion models are executed
    - Sets `OLLAMA_MAX_LOADED_MODELS=3` to set max loaded models to 3
-   - Sets `GGML_CUDA_ENABLE_UNIFIED_MEMORY=ON` to force Ollama to use the unified memory in total
    - Reloads systemd configuration and restarts Ollama service
 
 4. **Model Updates**:
