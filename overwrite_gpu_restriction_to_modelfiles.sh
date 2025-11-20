@@ -33,6 +33,8 @@ ollama list | tail -n +2 | while read -r line; do
         echo "Receiving layer count information to model: $model_name"
         full_url="https://ollama.com$blob_href"
         block_count=$(curl -s "$full_url" | tr -d '\n' | tr -s " " | grep -oP '\.block_count<\/div>\s*<div class="sm:hidden font-mono font-medium py-1">\s*\K[0-9]+(?=\s*<\/div>)' )
+        # Somehow the Block count on the Website is one block short...
+        block_count=$((block_count + 1))
         echo "Layer count for $model_name: $block_count"
 
         echo "Editing modelfile..."

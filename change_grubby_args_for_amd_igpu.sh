@@ -40,7 +40,7 @@ result=$(( (number * 1024 * 1024 * 1024) / 4096 ))
 # Display the result
 echo "-------------------------------"
 echo "Desired GTT size in GB: $number"
-echo "Caculated pages: $result"
+echo "Calculated pages: $result"
 echo "-------------------------------"
 
 # Write amdgpu memory related dmesg output to file as backup
@@ -69,7 +69,7 @@ echo "-------------------------------"
 if [ "$gtt_page_value" -ne "$result" ]; then
     echo "Values don't match, applying kernel parameter changes..."
     # Apply the changes
-    sudo grubby --update-kernel=ALL --args="ttm.pages_limit=$result ttm.page_pool_size=$result"
+    sudo grubby --update-kernel=ALL --args="ttm.pages_limit=$result ttm.page_pool_size=$result amdgpu.cwsr_enable=0"
     echo "Kernel parameters updated successfully"
     
     # Verify the changes
@@ -94,7 +94,15 @@ if [ "$gtt_page_value" -ne "$result" ]; then
         exit 1
     fi
 
-    if [ "$check" == 2 ]; then
+    if echo "$grubby_output" | grep -q "amdgpu.cwsr_enable=0"; then
+        echo "Verification successful: amdgpu.cwsr_enable=0 found in grubby output"
+        check=$((check + 1))
+    else
+        echo "Verification failed: amdgpu.cwsr_enable=0 not found in grubby output"
+        exit 1
+    fi
+
+    if [ "$check" == 3 ]; then # Changed from 2 to 3
         echo "-------------------------------"
         echo "Everything is set up"
         echo "Reboot will start in 5 seconds..."
@@ -102,7 +110,6 @@ if [ "$gtt_page_value" -ne "$result" ]; then
         sleep 5
         shutdown -r now
     fi
-    
 else
     echo "Values match - no changes needed"
 fi

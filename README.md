@@ -26,19 +26,19 @@ This script first runs a full system update and ensures everything is up an runn
    - Sets `OLLAMA_VULKAN=1` to increase compatibility for unsupported iGPUs (effective with Ollama 0.12.11)
    - Sets `OLLAMA_KV_CACHE_TYPE=q4_0` to optimize cache usage
    - Sets `OLLAMA_NUM_PARALLEL=3` to control parallelism if coding, embedding and autocompletion models are executed
-   - Sets `OLLAMA_MAX_LOADED_MODELS=3` to limit loaded models
+   - Sets `OLLAMA_MAX_LOADED_MODELS=3` to set max loaded models to 3
    - Sets `GGML_CUDA_ENABLE_UNIFIED_MEMORY=ON` to force Ollama to use the unified memory in total
    - Reloads systemd configuration and restarts Ollama service
 
 4. **Model Updates**:
    - Updates all installed Ollama models to their latest versions
 
-### `change_gtt_size_for_amd_igpu.sh`
+### `change_grubby_args_for_amd_igpu.sh`
 
 #### Description
 This script changes the size of the GTT memory assigned to the AMD iGPU, but limits the size to half of the available system memory - this can be overwritten to 90% of system memory.
-If Ollama or AMD ROCm introduce no bugs that impacts memory handling - the available LLM memory will be vRAM+GTT.
-Works with Ollama 0.12.11.
+If Ollama or AMD ROCm introduce no bugs that impact memory handling - the available LLM memory will be vRAM+GTT.
+Works with Ollama 0.13.0.
 
 1. **GTT Memory Configuration**:
    - Calculates required GTT (Graphics Transfer Table) memory size based on user input
@@ -46,6 +46,7 @@ Works with Ollama 0.12.11.
 
 2. **Parameter Adjustment**:
    - If GTT memory values don't match, updates kernel parameters with `amdttm.pages_limit` and `amdttm.page_pool_size`
+   - When the GTT memory is set: `amdgpu.cwsr_enable=0` will also be set to possibly decrease crashes
    - Applies changes using `grubby` command
 
 3. **Backup & Logging**:
