@@ -1,13 +1,14 @@
 #!/bin/bash
-HSA_OVERRIDE_GFX_VERSION="11.0.2"
+#HSA_OVERRIDE_GFX_VERSION="11.0.2"
 
 # Function to add environment variables to ollama service
 add_ollama_env_vars() {
     if [ -f /etc/systemd/system/ollama.service ]; then
         # Check if variables already exist
-        if ! grep -q 'HSA_OVERRIDE_GFX_VERSION' /etc/systemd/system/ollama.service; then
+        if ! grep -q 'OLLAMA_VULKAN' /etc/systemd/system/ollama.service; then
             # Add the environment variable lines after [Service] section
-            sudo sed -i '/\[Service\]/a Environment="HSA_OVERRIDE_GFX_VERSION='"$HSA_OVERRIDE_GFX_VERSION"'"' /etc/systemd/system/ollama.service
+            #sudo sed -i '/\[Service\]/a Environment="HSA_OVERRIDE_GFX_VERSION='"$HSA_OVERRIDE_GFX_VERSION"'"' /etc/systemd/system/ollama.service
+            sudo sed -i '/\[Service\]/a Environment="OLLAMA_VULKAN=1"' /etc/systemd/system/ollama.service
             sudo sed -i '/\[Service\]/a Environment="OLLAMA_KV_CACHE_TYPE=q4_0"' /etc/systemd/system/ollama.service
             sudo sed -i '/\[Service\]/a Environment="OLLAMA_NUM_PARALLEL=3"' /etc/systemd/system/ollama.service
             sudo sed -i '/\[Service\]/a Environment="OLLAMA_MAX_LOADED_MODELS=3"' /etc/systemd/system/ollama.service

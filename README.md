@@ -1,6 +1,8 @@
 ## Overview
 These scripts are designed to upgrade system packages, update Ollama, and configure AMD GPU memory settings for improved performance on local LLMs provided by Ollama.
 
+Works with Ollama 0.13.0.
+
 ***They are tested and used for Fedora Linux - please adjust for other distributions***
 
 ## What Each Script Accomplishes
@@ -22,7 +24,7 @@ This script first runs a full system update and ensures everything is up an runn
    - If versions differ, downloads and installs the latest Ollama version
 
 3. **GPU Configuration**:
-   - Sets environment variable `HSA_OVERRIDE_GFX_VERSION=11.0.2` for Ollama service
+   - Sets `OLLAMA_VULKAN=1` to enable iGPU Support via the usage of the Vulkan API
    - Sets `OLLAMA_KV_CACHE_TYPE=q4_0` to optimize cache usage
    - Sets `OLLAMA_NUM_PARALLEL=3` to control parallelism if coding, embedding and autocompletion models are executed
    - Sets `OLLAMA_MAX_LOADED_MODELS=3` to set max loaded models to 3
@@ -36,7 +38,6 @@ This script first runs a full system update and ensures everything is up an runn
 #### Description
 This script changes the size of the GTT memory assigned to the AMD iGPU, but limits the size to half of the available system memory - this can be overwritten to 90% of system memory.
 If Ollama or AMD ROCm introduce no bugs that impact memory handling - the available LLM memory will be vRAM+GTT.
-Works with Ollama 0.13.0.
 
 1. **GTT Memory Configuration**:
    - Calculates required GTT (Graphics Transfer Table) memory size based on user input
