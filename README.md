@@ -1,7 +1,7 @@
 ## Overview
 These scripts are designed to upgrade system packages, update Ollama, and configure AMD GPU memory settings for improved performance on local LLMs provided by Ollama.
 
-Works with Ollama 0.13.3.
+Works with Ollama 0.13.5.
 
 ***They are tested and used for Fedora Linux - please adjust for other distributions***
 
