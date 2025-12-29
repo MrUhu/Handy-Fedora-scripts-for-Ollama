@@ -97,3 +97,25 @@ chmod +x update.sh change_gtt_size_for_amd_igpu.sh overwrite_gpu_restriction_to_
 ./overwrite_gpu_restriction_to_modelfiles.sh
 ./change_gtt_size_for_amd_igpu.sh
 ```
+
+## _Little Extra_
+
+### `unload_ollama_models.sh`
+
+#### Description
+This script is a utility for testing purposes when running multiple large language models sequentially. It helps free up GPU memory by stopping all currently loaded Ollama models.
+
+1. **Model Detection**:
+   - Lists all currently loaded models using `ollama ps`
+   - Extracts model names from the output
+
+2. **Memory Management**:
+   - Stops each loaded model to free GPU memory
+   - Provides feedback about which models are being stopped
+
+3. **Use Case**:
+   - Particularly useful when testing multiple models in succession
+   - Helps prevent GPU memory exhaustion during rapid model switching
+   - Can be run between model testing sessions to ensure clean state
+
+**Note**: This is a testing utility and should be used with caution in production environments.
